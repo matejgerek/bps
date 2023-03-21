@@ -66,12 +66,6 @@ void scan_dir(char *directory)
         while ((dirp = readdir(dd))) {
             r = 0;
             sprintf(vfile, "%s/%s", directory, dirp->d_name);
-            // check if file is an ELF executable
-            if (strstr(vfile, ".") != NULL) {
-                if (strcmp(strstr(vfile, "."), ".so") == 0 || strcmp(strstr(vfile, "."), ".o") == 0 || strcmp(strstr(vfile, "."), ".a") == 0) {
-                    continue;
-                }
-            }
             hd = open(vfile, O_RDONLY);
             if (hd >= 0) {
                 int status = detect(vfile, hd);
